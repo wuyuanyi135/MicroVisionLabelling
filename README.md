@@ -16,5 +16,11 @@ Please assign the batch to yourself or email ywu647@uwo.ca for assignment.
     
     git checkout CurrentTask
     ```
+    
+    
+# Save the annotation
+Please save the annotation in the same folder of the batch. Use CSV format.
+
+
 
 >>>>>>> f5221de... Update Readme
