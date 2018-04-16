@@ -11,6 +11,10 @@ Please assign the batch to yourself or email ywu647@uwo.ca for assignment.
 2. Add git to your PATH
 3. Bring up a terminal/cmd and run the following commands. This will fetch all data and tools from the repository.
 
-    `git clone --recurse-submodules https://github.com/wuyuanyi135/MicroVisionLabelling`
+    ```
+    git clone --recurse-submodules https://github.com/wuyuanyi135/MicroVisionLabelling
+    
+    git checkout CurrentTask
+    ```
 
 >>>>>>> f5221de... Update Readme
