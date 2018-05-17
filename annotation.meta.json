@@ -1,10 +1,10 @@
 {
-    "region_annotation": {
+    "regionAttribute": {
         "crystal form": ["alpha", "beta"],
         "blurry": ["no","yes"],
         "crowd": ["no", "yes"]
     },
-    "image_annotation": {
+    "fileAttribute": {
         "crystal amount": ["just fine", "too many", "too much"],
         "exposure level": ["just fine", "too many", "too much"],
         "useful": ["yes", "no"]
