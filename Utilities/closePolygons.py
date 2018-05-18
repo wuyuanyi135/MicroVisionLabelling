@@ -9,13 +9,14 @@ with open(csv_file_path, 'r') as csvfile, open(csv_output_path, 'w', newline='')
     csv_reader = csv.reader(csvfile)
     csv_writer = csv.writer(csvwritefile)
     csv_writer.writerow(next(csv_reader))
-    for row in csv_reader:
+    for i, row in enumerate(csv_reader):
         obj = json.loads(row[5])
         if obj['name'] == 'polygon':
             x = obj['all_points_x']
             y = obj['all_points_y']
 
             if x[0] != x[-1] or y[0] != y[-1]:
+                print ("Detected an open loop: {} -> {}, closing it ...".format(row[0], row[4]))
                 x.append(x[0])
                 y.append(y[0])
                 
@@ -23,4 +24,4 @@ with open(csv_file_path, 'r') as csvfile, open(csv_output_path, 'w', newline='')
                 obj['all_points_y'] = y
         row[5] = json.dumps(obj)
         csv_writer.writerow(row)
-            
+print("Closed file to: " + csv_output_path)
