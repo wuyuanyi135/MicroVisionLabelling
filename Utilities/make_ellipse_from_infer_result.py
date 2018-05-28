@@ -42,35 +42,40 @@ def process_task(lock, t, load_list, counter):
     print("Processed {}".format(counter))
     return (t,alpha_list, beta_list)
 if __name__=="__main__":
-    with open('infer_result_remove_overlapping' ,'rb') as input_file:
-        load_list = []
-        t_list = []
-        counter = 0
-        pool = Pool(processes=3) 
-        lock = multiprocessing.Manager().BoundedSemaphore(3)
-        while True:
-            try:
-                for i in range(window_size):
-                    obj = pickle.load(input_file)
-                    m = json.loads(obj['m'])['cls_segms']
-                    try:
-                        f = int(obj['f'].split('.')[0])
-                    except:
-                        continue
-                    t_list.append(f)
-                    if not m:
-                        continue
-                    load_list.append(m)
-                t = np.mean(t_list)
-                print ("Prepared an object: {}".format(counter))
-                counter += 1
-                
-                lock.acquire()
-                
-                result = pool.apply_async(process_task, (lock, t, load_list, counter), callback=ellipse_list.append)
-            except Exception as e:
-                raise(e)
-        pool.close()
+    try:
+        with open('infer_result_remove_overlapping' ,'rb') as input_file:
+            manager = multiprocessing.Manager()
+
+            load_list = manager.list()
+            t_list = []
+            counter = 0
+            pool = Pool(processes=3) 
+            lock = manager.BoundedSemaphore(3)
+            while True:
+                try:
+                    for i in range(window_size):
+                        obj = pickle.load(input_file)
+                        m = json.loads(obj['m'])['cls_segms']
+                        try:
+                            f = int(obj['f'].split('.')[0])
+                        except:
+                            continue
+                        t_list.append(f)
+                        if not m:
+                            continue
+                        load_list.append(m)
+                    t = np.mean(t_list)
+                    print ("Prepared an object: {}".format(counter))
+                    counter += 1
+                    
+                    lock.acquire()
+                    result = pool.apply_async(process_task, (lock, t, load_list, counter), callback=ellipse_list.append)
+                except Exception as e:
+                    raise(e)
+            pool.close()
+            pool.join()
+        print("Writing matlab file...")
+        scipy.io.savemat("ellipses", {"ellipse": ellipse_list})
+    except KeyboardInterrupt:
+        pool.terminate()
         pool.join()
-    print("Writing matlab file...")
-    scipy.io.savemat("ellipses", {"ellipse": ellipse_list})
