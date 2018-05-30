@@ -84,7 +84,7 @@ if __name__=="__main__":
                     lock.acquire()
                     result = pool.apply_async(process_task, (lock, t, list(load_list), counter), callback=ellipse_list.append)
                     counter += 1
-                    # result.get()
+                    result.get()
                 except EOFError as e:
                     break
                     
