@@ -84,6 +84,7 @@ for batch_path in batches_full_path:
 
                     # if (not attr):
                     #     continue
+
                     mask = np.zeros([height, width],
                             dtype=np.uint8)
                     # Get indexes of pixels inside the polygon and set them to 1
@@ -125,6 +126,7 @@ if key_name:
         CATEGORIES.append({"id": i+1, "name": label, "supercategory": "object"})
 else:
     CATEGORIES.append({"id": 1, "name": "object", "supercategory": "object"})
+
 coco_output = {
         "info": INFO,
         "licenses": LICENSES,
