@@ -55,7 +55,7 @@ def process_task(lock, t, load_list, counter):
     return (t,alpha_list, beta_list)
 if __name__=="__main__":
     try:
-        with open('infer_result_remove_overlapping' ,'rb') as input_file:
+        with open('infer_result' ,'rb') as input_file:
             manager = multiprocessing.Manager()
 
             
@@ -84,14 +84,14 @@ if __name__=="__main__":
                     lock.acquire()
                     result = pool.apply_async(process_task, (lock, t, list(load_list), counter), callback=ellipse_list.append)
                     counter += 1
-                    result.get()
                 except EOFError as e:
+                    print("EOF")
                     break
                     
             pool.close()
             pool.join()
         print("Writing matlab file...")
-        scipy.io.savemat("ellipses", {"ellipse": [x[1] for x in ellipse_list], 'time': [x[0] for x in ellipse_list]})
+        scipy.io.savemat("ellipses", {"ellipse_alpha": [x[1] for x in ellipse_list], "ellipse_beta": [x[2] for x in ellipse_list], 'time': [x[0] for x in ellipse_list]})
     except KeyboardInterrupt:
         pool.terminate()
         pool.join()
