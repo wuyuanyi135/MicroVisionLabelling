@@ -66,14 +66,24 @@ for batch_path in batches_full_path:
                 
 
                 for i, p in enumerate(shape_entries):
-                    try:
-                        attr = attrs[i]
-                    except Exception:
-                        print ("Num attr is not matching Num shapes. Please check the annotation files")
-                        exit(-1)
+                    if key_name:
+                        try:
+                            attr = attrs[i]
+                        except Exception:
+                            print ("Num attr is not matching Num shapes. Please check the annotation files")
+                            exit(-1)
+                        try:
+                            id = labels.index(attr[key_name]) + 1
+                        except:
+                            print ("{} is not in labels: {}".format(attr[key_name], labels))
+                            exit(-1)
+                    else:
+                        id = 1
 
-                    if (not attr):
-                        continue
+                    
+
+                    # if (not attr):
+                    #     continue
                     mask = np.zeros([height, width],
                             dtype=np.uint8)
                     # Get indexes of pixels inside the polygon and set them to 1
@@ -84,15 +94,6 @@ for batch_path in batches_full_path:
                     if p['name'] == 'circle':
                         rr, cc = skimage.draw.circle(p['cy'], p['cx'], p['r'], (height, width))
                         mask[rr, cc] = 1
-                    
-                    if key_name:
-                        try:
-                            id = labels.index(attr[key_name]) + 1
-                        except:
-                            print ("{} is not in labels: {}".format(attr[key_name], labels))
-                            exit(-1)
-                    else:
-                        id = 1
 
                     ann = tools.create_annotation_info(image_file+str(i), image_file, {"id": id, 'is_crowd': False}, mask, (width, height), tolerance=0.1)
                     if not ann:
