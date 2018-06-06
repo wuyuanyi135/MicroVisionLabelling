@@ -4,21 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "name": "Python Experimental: run simplify",
-            "type": "pythonExperimental",
-            "request": "launch",
-            "program": "${workspaceFolder}/simplify_infer_result.py",
-            "args": [
-                "--threshold",
-                "0.85",
-                "-j",
-                "4",
-                "infer_result",
-                "infer_result_filtered"
-            ]
-        },
-
+        
         {
             "name": "Python Experimental: Current File (Integrated Terminal)",
             "type": "pythonExperimental",
