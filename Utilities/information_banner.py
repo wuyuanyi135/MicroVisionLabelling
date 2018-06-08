@@ -6,6 +6,7 @@ import glob
 parser = argparse.ArgumentParser()
 
 parser.add_argument("mode", help="can be restore or remove")
+parser.add_argument("-p", "--path", help="path to images. Null for internal datasets", action='append')
 parser.add_argument("-e", "--extension", help="file extension for the image files", default="jpg")
 args = parser.parse_args()
 
@@ -13,13 +14,16 @@ mode = args.mode
 assert mode in ["restore", "remove"]
 
 ext = args.extension
+path = args.path
 
-dataset_dir =  os.path.join(os.path.dirname(__file__), '../Dataset/')
-dataset_dir = os.path.abspath(dataset_dir) # python2 __file__ is not absolute
-batches = [name for name in os.listdir(dataset_dir)
-    if os.path.isdir(os.path.join(dataset_dir, name))]
-batches_full_path = [os.path.join(dataset_dir, x) for x in batches]
-
+if not path:
+    dataset_dir =  os.path.join(os.path.dirname(__file__), '../Dataset/')
+    dataset_dir = os.path.abspath(dataset_dir) # python2 __file__ is not absolute
+    batches = [name for name in os.listdir(dataset_dir)
+        if os.path.isdir(os.path.join(dataset_dir, name))]
+    batches_full_path = [os.path.join(dataset_dir, x) for x in batches]
+else:
+    batches_full_path = path
 
 for batch_path in batches_full_path:
     if mode == "restore":
